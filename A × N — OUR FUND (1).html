@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>A × N — OUR FUND</title>
+<style>
+:root{
+  --bg:#0E1113;--bg2:#14181B;--surf:#1A1F23;--surf2:#20262A;--bd:#2A3136;--bd2:#333B41;
+  --tx:#ECEFF1;--tx2:#9CA6AD;--tx3:#6C767D;
+  --gold:#C9A24C;--gold2:#E2C27A;--teal:#3E8677;--teal2:#5FAE9B;
+  --danger:#D9695A;--danger-bg:#2A1917;--amber:#D9A441;--green:#5BAE8C;
+  --r1:16px;--r2:11px;--r3:999px;
+  --shadow:0 10px 28px rgba(0,0,0,.4);
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px);height:100%}
+body{margin:0;min-height:100%;background:var(--bg);color:var(--tx);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;-webkit-font-smoothing:antialiased;letter-spacing:.1px}
+button,input,select{font-family:inherit;color:inherit}
+input,select{background:var(--surf2);border:1px solid var(--bd2);color:var(--tx);border-radius:var(--r2);padding:11px 13px;font-size:15px;width:100%;outline:none}
+input:focus,select:focus{border-color:var(--gold)}
+button{cursor:pointer}
+.btn{border:none;border-radius:var(--r2);padding:12px 18px;font-size:14.5px;font-weight:600;background:var(--surf2);color:var(--tx);border:1px solid var(--bd2);transition:opacity .15s}
+.btn:hover{opacity:.85}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.btn-gold{background:linear-gradient(180deg,var(--gold2),var(--gold));color:#1a1300;border:none}
+.btn-teal{background:var(--teal);color:#eafff9;border:none}
+.btn-ghost{background:transparent;border:1px solid var(--bd2)}
+.btn-danger{background:var(--danger);color:#2a0d08;border:none}
+.hidden{display:none!important}
+a{color:inherit}
+.wrap{max-width:1180px;margin:0 auto;padding:0 22px}
+#app{min-height:100%;display:flex;flex-direction:column}
+.topbar{position:sticky;top:0;z-index:20;background:rgba(14,17,19,.9);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd);padding-top:env(safe-area-inset-top,0px)}
+.topbar-in{display:flex;align-items:center;justify-content:space-between;padding:14px 22px;max-width:1180px;margin:0 auto;gap:12px}
+.brand{display:flex;flex-direction:column;line-height:1.15}
+.brand b{font-size:16.5px;letter-spacing:.3px}
+.brand span{font-size:11.5px;color:var(--tx3)}
+.topbar-r{display:flex;align-items:center;gap:10px}
+.iconbtn{position:relative;background:var(--surf);border:1px solid var(--bd2);width:38px;height:38px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:16px}
+.badge{position:absolute;top:-4px;right:-4px;background:var(--amber);color:#241a03;font-size:10px;font-weight:700;min-width:17px;height:17px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--bg)}
+.userchip{display:flex;align-items:center;gap:8px;background:var(--surf);border:1px solid var(--bd2);border-radius:var(--r3);padding:5px 12px 5px 5px}
+.avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--gold2),var(--teal2));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#111}
+.userchip .un{font-size:13.5px;font-weight:600}
+.userchip .ur{font-size:10.5px;color:var(--tx3);display:block}
+.langtoggle{display:flex;border:1px solid var(--bd2);border-radius:var(--r3);overflow:hidden}
+.langtoggle button{background:transparent;border:none;padding:6px 10px;font-size:12px;color:var(--tx3);font-weight:600}
+.langtoggle button.on{background:var(--surf2);color:var(--tx)}
+.shell{display:flex;flex:1;max-width:1180px;margin:0 auto;width:100%}
+.sidebar{width:212px;flex-shrink:0;padding:20px 12px;border-right:1px solid var(--bd);display:flex;flex-direction:column;gap:2px}
+.navitem{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-radius:var(--r2);color:var(--tx2);font-size:14px;font-weight:500;text-decoration:none;background:transparent;border:none;text-align:left;width:100%}
+.navitem:hover{background:var(--surf)}
+.navitem.active{background:var(--surf2);color:var(--tx);font-weight:600}
+.navitem .nb{background:var(--amber);color:#241a03;font-size:10px;font-weight:700;padding:1px 6px;border-radius:var(--r3)}
+.main{flex:1;padding:22px;min-width:0}
+.h1{font-size:22px;font-weight:700;margin:0 0 4px}
+.sub{color:var(--tx3);font-size:13.5px;margin:0 0 20px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid2{display:grid;grid-template-columns:1.4fr 1fr;gap:14px}
+.card{background:var(--surf);border:1px solid var(--bd);border-radius:var(--r1);padding:18px}
+.hero{background:linear-gradient(160deg,var(--surf2),var(--surf));border:1px solid var(--bd2);border-radius:var(--r1);padding:24px;margin-bottom:14px}
+.hero .lbl{font-size:12.5px;color:var(--tx3);margin-bottom:6px}
+.hero .val{font-size:34px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+.splitbar{height:8px;border-radius:var(--r3);background:var(--bd2);overflow:hidden;display:flex;margin:14px 0 8px}
+.splitrow{display:flex;justify-content:space-between;font-size:12.5px;color:var(--tx2)}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px}
+.stat .lbl{font-size:12px;color:var(--tx3);margin-bottom:6px}
+.stat .val{font-size:20px;font-weight:700;font-variant-numeric:tabular-nums}
+.actionrow{display:flex;gap:10px;margin-top:16px}
+.actionrow .btn{flex:1}
+.list-item{display:flex;justify-content:space-between;align-items:center;padding:11px 0;border-bottom:1px solid var(--bd)}
+.list-item:last-child{border-bottom:none}
+.pill{font-size:11px;font-weight:700;padding:3px 9px;border-radius:var(--r3)}
+.pill-pending{background:#3a2e12;color:var(--amber)}
+.pill-approved{background:#12301f;color:var(--green)}
+.pill-rejected{background:var(--danger-bg);color:var(--danger)}
+.pill-cancelled{background:#26292c;color:var(--tx3)}
+.empty{color:var(--tx3);font-size:13.5px;padding:22px 0;text-align:center}
+.banner{background:var(--danger-bg);border:1px solid #4a2620;color:#f3c9c0;border-radius:var(--r2);padding:13px 16px;margin:16px 22px 0;display:flex;align-items:center;gap:10px;font-size:13.5px;max-width:1136px;margin-left:auto;margin-right:auto}
+.banner b{color:var(--danger)}
+.goalbar{height:7px;background:var(--bd2);border-radius:var(--r3);overflow:hidden;margin:8px 0}
+.goalbar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--teal2))}
+.modal-ov{position:fixed;inset:0;background:rgba(6,7,8,.65);display:flex;align-items:center;justify-content:center;z-index:50;padding:16px}
+.modal{background:var(--bg2);border:1px solid var(--bd2);border-radius:var(--r1);width:420px;max-width:100%;max-height:88vh;overflow:auto;box-shadow:var(--shadow)}
+.modal-h{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--bd)}
+.modal-h b{font-size:15.5px}
+.modal-b{padding:18px}
+.steps{display:flex;gap:5px;margin-bottom:16px}
+.steps i{flex:1;height:3px;border-radius:2px;background:var(--bd2)}
+.steps i.on{background:var(--gold)}
+.field{margin-bottom:14px}
+.field label{font-size:12.5px;color:var(--tx2);display:block;margin-bottom:6px}
+.err{color:var(--danger);font-size:12px;margin-top:5px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--bd);font-size:13.5px}
+.summary-row:last-child{border:none}
+.modal-f{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--bd)}
+.modal-f .btn{flex:1}
+.upload{border:1.5px dashed var(--bd2);border-radius:var(--r2);padding:20px;text-align:center;font-size:13px;color:var(--tx3)}
+.upload.ok{border-color:var(--green);color:var(--green)}
+.upload.bad{border-color:var(--danger);color:var(--danger)}
+.notifpanel,.lyrapanel{position:fixed;top:0;right:0;height:100%;width:360px;max-width:92vw;background:var(--bg2);border-left:1px solid var(--bd2);z-index:60;box-shadow:var(--shadow);display:flex;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}
+.panel-h{display:flex;justify-content:space-between;align-items:center;padding:16px 18px;border-bottom:1px solid var(--bd)}
+.panel-b{flex:1;overflow:auto;padding:14px 18px}
+.notif-item{padding:11px 0;border-bottom:1px solid var(--bd);font-size:13px}
+.notif-item small{color:var(--tx3);display:block;margin-top:3px}
+.notif-item.unread{position:relative;padding-left:12px}
+.notif-item.unread:before{content:'';position:absolute;left:0;top:16px;width:6px;height:6px;border-radius:50%;background:var(--amber)}
+.lyra-fab{position:fixed;bottom:22px;right:22px;z-index:40;background:var(--surf);border:1px solid var(--gold);color:var(--gold2);border-radius:var(--r3);padding:12px 18px;font-weight:700;font-size:14px;box-shadow:var(--shadow);display:flex;align-items:center;gap:7px}
+.lyra-msgs{flex:1;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px}
+.lyra-msg{max-width:85%;padding:10px 13px;border-radius:13px;font-size:13.5px;line-height:1.45}
+.lyra-msg.u{align-self:flex-end;background:var(--gold);color:#1a1300}
+.lyra-msg.a{align-self:flex-start;background:var(--surf2);border:1px solid var(--bd2)}
+.lyra-inputrow{display:flex;gap:8px;padding:12px;border-top:1px solid var(--bd)}
+.lyra-chip{background:var(--surf2);border:1px solid var(--bd2);border-radius:var(--r3);padding:6px 11px;font-size:12px;color:var(--tx2);margin:3px 4px 0 0;display:inline-block}
+.login-wrap{flex:1;display:flex;align-items:center;justify-content:center;padding:20px}
+.login-card{width:380px;max-width:100%;background:var(--surf);border:1px solid var(--bd2);border-radius:var(--r1);padding:30px 26px;box-shadow:var(--shadow)}
+.login-brand{text-align:center;margin-bottom:22px}
+.login-brand b{font-size:21px;display:block}
+.login-brand span{font-size:12.5px;color:var(--tx3)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--surf2);border:1px solid var(--bd2);border-radius:var(--r2);padding:11px 18px;font-size:13.5px;z-index:90;box-shadow:var(--shadow)}
+.toast.err{border-color:var(--danger);color:#ffd9d2}
+.toast.ok{border-color:var(--green);color:#d3f3e6}
+.svgchart{width:100%;height:auto}
+.mobilenav{display:none}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--bd)}
+th{color:var(--tx3);font-weight:600;font-size:11.5px}
+.tablewrap{overflow-x:auto}
+.milestone{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--bd)}
+.milestone:last-child{border:none}
+.mdot{width:9px;height:9px;border-radius:50%;background:var(--gold);margin-top:5px;flex-shrink:0}
+@media(max-width:900px){
+  .shell{flex-direction:column}
+  .sidebar{display:none}
+  .mobilenav{display:flex;position:sticky;bottom:0;background:rgba(20,24,27,.95);backdrop-filter:blur(8px);border-top:1px solid var(--bd);padding:8px 4px calc(8px + env(safe-area-inset-bottom,0px));z-index:15;justify-content:space-around}
+  .mobilenav .navitem{flex-direction:column;font-size:10.5px;text-align:center;padding:6px 4px;gap:2px}
+  .grid3{grid-template-columns:1fr 1fr}
+  .grid2{grid-template-columns:1fr}
+  .brand span{display:none}
+  .userchip .ur{display:none}
+}
+@media(max-width:520px){
+  .grid3{grid-template-columns:1fr}
+  .hero .val{font-size:27px}
+  .wrap,.main{padding-left:14px;padding-right:14px}
+  .notifpanel,.lyrapanel{width:100%;max-width:100%}
+}
+</style>
+</head>
+<body>
+<div id="app"></div>
+<div id="overlayRoot"></div>
+<script>
+/* ---------- I18N ---------- */
+const I18N={en:{
+tagline:"Save together. Build together.",login_id:"Email or Username",login_pw:"Password",login_btn:"LOGIN",login_signing:"Signing in…",login_err:"Incorrect email/username or password.",
+nav_dashboard:"Dashboard",nav_investments:"Investments",nav_analytics:"Analytics",nav_journey:"Our Journey",nav_settings:"Settings",nav_admin:"Admin Panel",logout:"Log out",
+total_fund:"Total Fund Value",total_contrib:"Total Contributions",invest_value:"Investment Value",avail_bal:"Available Balance",pending_lbl:"Pending",recent_activity:"Recent Activity",goals:"Goals",no_activity:"No activity yet. Make your first top-up to get started.",
+topup:"+ TOP UP",withdraw:"WITHDRAW",freeze_banner:"WITHDRAWALS FROZEN",freeze_note:"Arkan has temporarily paused withdrawals for the fund's safety. Deposits are unaffected.",
+status_pending:"Pending",status_approved:"Approved",status_rejected:"Rejected",status_cancelled:"Cancelled",
+step:"Step",tu_amount:"Amount",tu_amount_lbl:"How much are you topping up?",tu_target:"Target",tu_target_lbl:"Where should this go?",tu_pay:"Payment Info",tu_proof:"Payment Proof",tu_confirm:"Confirmation",
+tu_bank:"Transfer to the fund's joint account below, then upload proof.",tu_upload_cta:"Click to upload proof (image or PDF, max 5MB)",tu_uploaded:"Proof attached",
+back:"Back",next:"Next",submit:"Submit",cancel:"Cancel",close:"Close",
+err_required:"This field is required.",err_number:"Enter a valid number.",err_positive:"Amount must be greater than zero.",err_min:"Minimum amount is Rp10,000.",err_file:"Please attach a valid file (image or PDF, under 5MB).",err_over:"Amount exceeds available balance.",err_frozen:"Withdrawals are currently frozen and cannot be submitted.",
+contributor:"Contributor",amount:"Amount",target:"Target",method:"Method",proof_status:"Proof",method_transfer:"Bank Transfer",tu_success:"Top-up submitted — pending approval.",
+w_amount_lbl:"How much would you like to withdraw?",w_dest:"Destination",w_dest_lbl:"Where should funds be sent?",w_confirm:"Confirmation",destination:"Destination",w_success:"Withdrawal request submitted — pending approval.",avail_note:"Available to withdraw",
+general_fund:"General Fund",dest_arkan:"Arkan's Bank Account",dest_nazla:"Nazla's Bank Account",
+admin_panel:"Admin Panel",pending_deposits:"Pending Deposits",pending_withdrawals:"Pending Withdrawals",approve:"Approve",reject:"Reject",no_pending:"Nothing pending right now.",
+emergency_freeze:"Emergency Freeze",freeze_active_lbl:"Active — withdrawals blocked",freeze_inactive_lbl:"Inactive — withdrawals allowed",freeze_on_btn:"Freeze Withdrawals",freeze_off_btn:"Unfreeze Withdrawals",
+notif_title:"Notifications",no_notif:"No notifications yet.",mark_read:"Mark all as read",
+n_dep_sub:"New deposit submitted",n_dep_appr:"Deposit approved",n_dep_rej:"Deposit rejected",n_wd_sub:"New withdrawal submitted",n_wd_appr:"Withdrawal approved",n_wd_rej:"Withdrawal rejected",n_freeze_on:"Emergency freeze activated",n_freeze_off:"Emergency freeze deactivated",
+lyra_ask:"✦ Ask Lyra",lyra_title:"LYRA",lyra_sub:"Your OUR FUND assistant",lyra_ph:"Ask about the fund…",lyra_greet:"Hi, I'm Lyra. Ask me about balances, contributions, goals, or pending activity.",lyra_unknown:"I don't have that information yet — try asking about the total fund value, contribution split, pending items, or goals.",lyra_no_admin:"That's admin-only information I can't share here.",
+settings_title:"Settings",account_info:"Account",language:"Language",notif_prefs:"Notification Preferences",notif_prefs_desc:"Receive in-app alerts for deposits, withdrawals and freeze changes.",session:"Session",session_desc:"You're signed in as",security:"Security",role:"Role",role_admin:"Administrator",role_member:"Member",
+inv_title:"Investment holdings",inv_empty:"No investment holdings recorded yet. Once the fund purchases an investment, it will appear here with cost basis and current value — nothing is estimated.",cost_basis:"Cost Basis",current_value:"Current Value",gain_loss:"Gain/Loss",allocation:"Allocation",
+an_split:"Contribution Split",an_monthly:"Monthly Deposits (Approved)",an_status:"Transaction Activity",an_goal_progress:"Goal Progress",
+journey_title:"Our shared progress, one contribution at a time.",journey_milestones:"Milestones",journey_none:"Your milestones will appear here as you save together.",
+m_first_deposit:"First contribution approved",m_fund_50:"Fund reached Rp50,000,000",m_fund_100:"Fund reached Rp100,000,000",
+toast_saved:"Saved.",toast_logout:"Logged out.",unauthorized:"You don't have access to that page.",
+},
+id:{
+tagline:"Menabung bersama. Membangun bersama.",login_id:"Email atau Username",login_pw:"Kata Sandi",login_btn:"MASUK",login_signing:"Sedang masuk…",login_err:"Email/username atau kata sandi salah.",
+nav_dashboard:"Dasbor",nav_investments:"Investasi",nav_analytics:"Analitik",nav_journey:"Perjalanan Kami",nav_settings:"Pengaturan",nav_admin:"Panel Admin",logout:"Keluar",
+total_fund:"Total Nilai Dana",total_contrib:"Total Kontribusi",invest_value:"Nilai Investasi",avail_bal:"Saldo Tersedia",pending_lbl:"Tertunda",recent_activity:"Aktivitas Terbaru",goals:"Tujuan",no_activity:"Belum ada aktivitas. Lakukan top up pertama untuk memulai.",
+topup:"+ TOP UP",withdraw:"TARIK DANA",freeze_banner:"PENARIKAN DIBEKUKAN",freeze_note:"Arkan sementara menghentikan penarikan demi keamanan dana. Setoran tidak terpengaruh.",
+status_pending:"Tertunda",status_approved:"Disetujui",status_rejected:"Ditolak",status_cancelled:"Dibatalkan",
+step:"Langkah",tu_amount:"Jumlah",tu_amount_lbl:"Berapa jumlah top up Anda?",tu_target:"Tujuan",tu_target_lbl:"Dana ini untuk apa?",tu_pay:"Info Pembayaran",tu_proof:"Bukti Pembayaran",tu_confirm:"Konfirmasi",
+tu_bank:"Transfer ke rekening bersama di bawah ini, lalu unggah bukti.",tu_upload_cta:"Klik untuk unggah bukti (gambar/PDF, maks 5MB)",tu_uploaded:"Bukti terlampir",
+back:"Kembali",next:"Lanjut",submit:"Kirim",cancel:"Batal",close:"Tutup",
+err_required:"Kolom ini wajib diisi.",err_number:"Masukkan angka yang valid.",err_positive:"Jumlah harus lebih dari nol.",err_min:"Jumlah minimum Rp10.000.",err_file:"Lampirkan file yang valid (gambar/PDF, di bawah 5MB).",err_over:"Jumlah melebihi saldo yang tersedia.",err_frozen:"Penarikan sedang dibekukan dan tidak dapat diajukan.",
+contributor:"Kontributor",amount:"Jumlah",target:"Tujuan",method:"Metode",proof_status:"Bukti",method_transfer:"Transfer Bank",tu_success:"Top up terkirim — menunggu persetujuan.",
+w_amount_lbl:"Berapa jumlah yang ingin ditarik?",w_dest:"Tujuan",w_dest_lbl:"Dana dikirim ke mana?",w_confirm:"Konfirmasi",destination:"Tujuan",w_success:"Permintaan penarikan terkirim — menunggu persetujuan.",avail_note:"Tersedia untuk ditarik",
+general_fund:"Dana Umum",dest_arkan:"Rekening Bank Arkan",dest_nazla:"Rekening Bank Nazla",
+admin_panel:"Panel Admin",pending_deposits:"Setoran Tertunda",pending_withdrawals:"Penarikan Tertunda",approve:"Setujui",reject:"Tolak",no_pending:"Tidak ada yang tertunda saat ini.",
+emergency_freeze:"Pembekuan Darurat",freeze_active_lbl:"Aktif — penarikan diblokir",freeze_inactive_lbl:"Nonaktif — penarikan diizinkan",freeze_on_btn:"Bekukan Penarikan",freeze_off_btn:"Buka Pembekuan",
+notif_title:"Notifikasi",no_notif:"Belum ada notifikasi.",mark_read:"Tandai semua dibaca",
+n_dep_sub:"Setoran baru diajukan",n_dep_appr:"Setoran disetujui",n_dep_rej:"Setoran ditolak",n_wd_sub:"Penarikan baru diajukan",n_wd_appr:"Penarikan disetujui",n_wd_rej:"Penarikan ditolak",n_freeze_on:"Pembekuan darurat diaktifkan",n_freeze_off:"Pembekuan darurat dinonaktifkan",
+lyra_ask:"✦ Tanya Lyra",lyra_title:"LYRA",lyra_sub:"Asisten OUR FUND Anda",lyra_ph:"Tanyakan tentang dana…",lyra_greet:"Hai, saya Lyra. Tanyakan tentang saldo, kontribusi, tujuan, atau aktivitas tertunda.",lyra_unknown:"Saya belum memiliki informasi itu — coba tanyakan total nilai dana, split kontribusi, item tertunda, atau tujuan.",lyra_no_admin:"Itu informasi khusus admin yang tidak bisa saya bagikan di sini.",
+settings_title:"Pengaturan",account_info:"Akun",language:"Bahasa",notif_prefs:"Preferensi Notifikasi",notif_prefs_desc:"Terima notifikasi dalam aplikasi untuk setoran, penarikan, dan perubahan pembekuan.",session:"Sesi",session_desc:"Anda masuk sebagai",security:"Keamanan",role:"Peran",role_admin:"Administrator",role_member:"Anggota",
+inv_title:"Kepemilikan investasi",inv_empty:"Belum ada kepemilikan investasi yang tercatat. Setelah dana membeli investasi, akan muncul di sini lengkap dengan modal dan nilai saat ini — tidak ada yang diperkirakan.",cost_basis:"Modal Awal",current_value:"Nilai Saat Ini",gain_loss:"Untung/Rugi",allocation:"Alokasi",
+an_split:"Split Kontribusi",an_monthly:"Setoran Bulanan (Disetujui)",an_status:"Aktivitas Transaksi",an_goal_progress:"Progres Tujuan",
+journey_title:"Perjalanan bersama kami, satu kontribusi setiap saat.",journey_milestones:"Tonggak Pencapaian",journey_none:"Tonggak pencapaian Anda akan muncul di sini seiring menabung bersama.",
+m_first_deposit:"Kontribusi pertama disetujui",m_fund_50:"Dana mencapai Rp50.000.000",m_fund_100:"Dana mencapai Rp100.000.000",
+toast_saved:"Tersimpan.",toast_logout:"Berhasil keluar.",unauthorized:"Anda tidak memiliki akses ke halaman itu.",
+}};
+function t(k){const L=getLang();return (I18N[L]&&I18N[L][k])||I18N.en[k]||k;}
+function getLang(){return localStorage.getItem('afn_lang')||'en';}
+function setLang(l){localStorage.setItem('afn_lang',l);render();}
+
+/* ---------- DATA LAYER (client-persisted ledger; see chat note on shared-sync upgrade path) ---------- */
+const DB_KEY='afn_db_v1';
+function seedDB(){return{
+  users:{
+    arkan:{name:'Arkan',email:'arkanariya05@gmail.com',username:'Arkan',role:'admin',hash:'f182e84b177cc76e75ce90b6bc9e3d9cf781012678570d9f8465394e54c09424'},
+    nazla:{name:'Nazla',email:'nazlazulayka99@gmail.com',username:'Nazla',role:'member',hash:'aed9d596e4dc74556810cae678e87d5dbc5668d7a925d0f95d9b56ebeca1c09d'}
+  },
+  freeze:{active:false,at:null},
+  tx:[],
+  goals:[{id:'g1',en:'Emergency Fund',id_:'Dana Darurat',target:50000000},{id:'g2',en:'House Down Payment',id_:'DP Rumah',target:200000000},{id:'g3',en:'Investment Portfolio',id_:'Portofolio Investasi',target:100000000}],
+  inv:[],
+  notif:[]
+};}
+function loadDB(){let d=localStorage.getItem(DB_KEY);if(!d){const s=seedDB();localStorage.setItem(DB_KEY,JSON.stringify(s));return s;}return JSON.parse(d);}
+function saveDB(d){localStorage.setItem(DB_KEY,JSON.stringify(d));}
+async function sha256(str){const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str));return[...new Uint8Array(buf)].map(x=>x.toString(16).padStart(2,'0')).join('');}
+function fmt(n){return 'Rp'+Math.round(n||0).toLocaleString('id-ID');}
+function fmtDate(ts){return new Date(ts).toLocaleDateString(getLang()==='id'?'id-ID':'en-US',{day:'numeric',month:'short',year:'numeric'});}
+function uid(){return Math.random().toString(36).slice(2,10)+Date.now().toString(36);}
+
+function approvedTx(db,type){return db.tx.filter(x=>x.type===type&&x.status==='approved');}
+function pendingTx(db,type){return db.tx.filter(x=>(!type||x.type===type)&&x.status==='pending');}
+function totalContrib(db,who){return approvedTx(db,'deposit').filter(x=>x.by===who).reduce((s,x)=>s+x.amount,0);}
+function cashBalance(db){return approvedTx(db,'deposit').reduce((s,x)=>s+x.amount,0)-approvedTx(db,'withdrawal').reduce((s,x)=>s+x.amount,0);}
+function investValue(db){return db.inv.reduce((s,i)=>s+i.currentValue,0);}
+function totalFund(db){return cashBalance(db)+investValue(db);}
+function pendingWithdrawSum(db){return pendingTx(db,'withdrawal').reduce((s,x)=>s+x.amount,0);}
+function availBalance(db){return Math.max(0,cashBalance(db)-pendingWithdrawSum(db));}
+function goalCurrent(db,gid){return approvedTx(db,'deposit').filter(x=>x.target===gid).reduce((s,x)=>s+x.amount,0);}
+function splitPct(db){const a=totalContrib(db,'arkan'),n=totalContrib(db,'nazla'),tot=a+n;if(tot<=0)return{a:50,n:50};return{a:Math.round(a/tot*100),n:Math.round(n/tot*100)};}
+function pushNotif(db,key,audience){db.notif.unshift({id:uid(),key,audience,read:false,ts:Date.now()});}
+
+/* ---------- SESSION ---------- */
+function getSession(){try{const s=JSON.parse(localStorage.getItem('afn_sess'));if(s&&s.exp>Date.now())return s;}catch(e){}return null;}
+function setSession(s){localStorage.setItem('afn_sess',JSON.stringify(s));}
+function clearSession(){localStorage.removeItem('afn_sess');}
+
+/* ---------- ROUTER STATE ---------- */
+let STATE={route:'dashboard',modal:null,modalStep:1,wizard:{},notifOpen:false,lyraOpen:false,lyraMsgs:[],toast:null,loginErr:'',loginBusy:false};
+function toast(msg,type){STATE.toast={msg,type};render();setTimeout(()=>{STATE.toast=null;render();},2600);}
+
+const ROUTES=['dashboard','investments','analytics','journey','settings','admin'];
+window.addEventListener('hashchange',()=>{syncRouteFromHash();render();});
+function syncRouteFromHash(){const h=(location.hash||'#/dashboard').replace('#/','');STATE.route=ROUTES.includes(h)?h:'dashboard';}
+function goto(r){location.hash='#/'+r;}
+
+/* ---------- RENDER ---------- */
+function render(){
+  const app=document.getElementById('app');
+  const sess=getSession();
+  if(!sess){app.innerHTML=renderLogin();bind();return;}
+  const db=loadDB();
+  if(STATE.route==='admin'&&sess.role!=='admin'){
+    STATE.route='dashboard';location.hash='#/dashboard';
+    STATE.toast={msg:t('unauthorized'),type:'err'};
+    setTimeout(()=>{STATE.toast=null;render();},2600);
+  }
+  let content='';
+  if(STATE.route==='dashboard')content=renderDashboard(db,sess);
+  else if(STATE.route==='investments')content=renderInvestments(db,sess);
+  else if(STATE.route==='analytics')content=renderAnalytics(db,sess);
+  else if(STATE.route==='journey')content=renderJourney(db,sess);
+  else if(STATE.route==='settings')content=renderSettings(db,sess);
+  else if(STATE.route==='admin')content=sess.role==='admin'?renderAdmin(db,sess):'';
+  app.innerHTML=renderShell(content,db,sess);
+  renderOverlays(db,sess);
+  bind();
+}
+function navIcon(r){return{dashboard:'',investments:'₿',analytics:'📊',journey:'♡',settings:'⚙',admin:''}[r]||'';}
+function navLabel(r){return{dashboard:t('nav_dashboard'),investments:t('nav_investments'),analytics:t('nav_analytics'),journey:t('nav_journey'),settings:t('nav_settings'),admin:t('nav_admin')}[r];}
+function navItems(sess){let items=['dashboard','investments','analytics','journey','settings'];if(sess.role==='admin')items.push('admin');return items;}
+
+function renderShell(content,db,sess){
+  const pendCount=pendingTx(db).length;
+  const unread=db.notif.filter(n=>(n.audience==='all'||sess.role==='admin')&&!n.read).length;
+  const items=navItems(sess);
+  return `
+  <div class="topbar"><div class="topbar-in">
+    <div class="brand"><b>A × N — OUR FUND</b><span>${t('tagline')}</span></div>
+    <div class="topbar-r">
+      <div class="langtoggle"><button data-act="lang" data-v="en" class="${getLang()==='en'?'on':''}">EN</button><button data-act="lang" data-v="id" class="${getLang()==='id'?'on':''}">ID</button></div>
+      <button class="iconbtn" data-act="notif-toggle" title="${t('notif_title')}">🔔${unread?`<span class="badge">${unread}</span>`:''}</button>
+      <div class="userchip"><div class="avatar">${sess.name[0]}</div><div><span class="un">${sess.name}</span><span class="ur">${sess.role==='admin'?t('role_admin'):t('role_member')}</span></div></div>
+      <button class="iconbtn" data-act="logout" title="${t('logout')}">⎋</button>
+    </div>
+  </div></div>
+  ${db.freeze.active?`<div class="banner">🔴 <b>${t('freeze_banner')}</b> — ${t('freeze_note')}</div>`:''}
+  <div class="shell">
+    <div class="sidebar">
+      ${items.map(r=>`<button class="navitem ${STATE.route===r?'active':''}" data-act="nav" data-to="${r}">${r==='admin'?t('nav_admin'):(navIcon(r)?navIcon(r)+' ':'')+navLabel(r)}${r==='admin'&&pendCount?`<span class="nb">${pendCount}</span>`:''}</button>`).join('')}
+    </div>
+    <div class="main">${content}</div>
+  </div>
+  <div class="mobilenav">
+    ${items.map(r=>`<button class="navitem ${STATE.route===r?'active':''}" data-act="nav" data-to="${r}"><span>${r==='admin'?'🛡':(navIcon(r)||'●')}</span><span>${r==='admin'?t('nav_admin').split(' ')[0]:navLabel(r)}</span></button>`).join('')}
+  </div>
+  <button class="lyra-fab" data-act="lyra-toggle">${t('lyra_ask')}</button>
+  ${STATE.toast?`<div class="toast ${STATE.toast.type||''}">${STATE.toast.msg}</div>`:''}
+  `;
+}
+
+function renderLogin(){
+  return `<div id="loginRoot" style="display:flex;flex-direction:column;min-height:100vh">
+  <div class="login-wrap"><div class="login-card">
+    <div class="login-brand"><b>A × N — OUR FUND</b><span>${t('tagline')}</span></div>
+    <div class="field"><label>${t('login_id')}</label><input id="loginId" type="text" autocomplete="username"></div>
+    <div class="field"><label>${t('login_pw')}</label><input id="loginPw" type="password" autocomplete="current-password"></div>
+    ${STATE.loginErr?`<div class="err" style="margin-bottom:12px">${STATE.loginErr}</div>`:''}
+    <button class="btn btn-gold" style="width:100%" data-act="login" ${STATE.loginBusy?'disabled':''}>${STATE.loginBusy?t('login_signing'):t('login_btn')}</button>
+    <div style="text-align:center;margin-top:16px"><div class="langtoggle" style="display:inline-flex"><button data-act="lang" data-v="en" class="${getLang()==='en'?'on':''}">EN</button><button data-act="lang" data-v="id" class="${getLang()==='id'?'on':''}">ID</button></div></div>
+  </div></div></div>`;
+}
+
+function renderDashboard(db,sess){
+  const sp=splitPct(db);
+  const cf=totalFund(db),tc=totalContrib(db,'arkan')+totalContrib(db,'nazla'),iv=investValue(db),ab=availBalance(db);
+  const pend=pendingTx(db);
+  const recent=[...db.tx].sort((a,b)=>b.ts-a.ts).slice(0,6);
+  const goals=db.goals;
+  return `
+  <h1 class="h1">${navLabel('dashboard')}</h1><p class="sub">${t('tagline')}</p>
+  <div class="hero">
+    <div class="lbl">${t('total_fund')}</div><div class="val">${fmt(cf)}</div>
+    <div class="splitbar"><div style="width:${sp.a}%;background:var(--gold)"></div><div style="width:${sp.n}%;background:var(--teal)"></div></div>
+    <div class="splitrow"><span><span class="dot" style="background:var(--gold)"></span>Arkan ${sp.a}%</span><span><span class="dot" style="background:var(--teal)"></span>Nazla ${sp.n}%</span></div>
+    <div class="actionrow">
+      <button class="btn btn-gold" data-act="topup-open">${t('topup')}</button>
+      <button class="btn ${db.freeze.active?'btn-ghost':'btn-teal'}" data-act="withdraw-open" ${db.freeze.active?'disabled':''}>${t('withdraw')}</button>
+    </div>
+  </div>
+  <div class="grid3" style="margin-bottom:14px">
+    <div class="card stat"><div class="lbl">${t('total_contrib')}</div><div class="val">${fmt(tc)}</div></div>
+    <div class="card stat"><div class="lbl">${t('invest_value')}</div><div class="val">${fmt(iv)}</div></div>
+    <div class="card stat"><div class="lbl">${t('avail_bal')}</div><div class="val">${fmt(ab)}</div></div>
+  </div>
+  <div class="grid2">
+    <div class="card">
+      <div class="lbl" style="margin-bottom:10px;font-weight:600;color:var(--tx)">${t('recent_activity')} ${pend.length?`<span class="pill pill-pending" style="margin-left:8px">${pend.length} ${t('pending_lbl')}</span>`:''}</div>
+      ${recent.length?recent.map(txRow).join(''):`<div class="empty">${t('no_activity')}</div>`}
+    </div>
+    <div class="card">
+      <div class="lbl" style="margin-bottom:10px;font-weight:600;color:var(--tx)">${t('goals')}</div>
+      ${goals.map(g=>goalRow(db,g)).join('')}
+    </div>
+  </div>`;
+}
+function txRow(x){
+  const label=x.type==='deposit'?(x.by==='arkan'?'Arkan':'Nazla')+' → '+targetLabel(x.target):targetLabel(x.dest||'general');
+  return `<div class="list-item"><div><div style="font-size:13.5px">${x.type==='deposit'?'+':'−'} ${fmt(x.amount)}</div><div style="font-size:11.5px;color:var(--tx3)">${label} · ${fmtDate(x.ts)}</div></div><span class="pill pill-${x.status}">${t('status_'+x.status)}</span></div>`;
+}
+function targetLabel(g){if(g==='general')return t('general_fund');if(g==='dest_arkan')return t('dest_arkan');if(g==='dest_nazla')return t('dest_nazla');const db=loadDB();const goal=db.goals.find(x=>x.id===g);if(goal)return getLang()==='id'?goal.id_:goal.en;return g;}
+function goalRow(db,g){const cur=goalCurrent(db,g.id);const pct=Math.min(100,Math.round(cur/g.target*100));const name=getLang()==='id'?g.id_:g.en;
+  return `<div style="margin-bottom:12px"><div style="display:flex;justify-content:space-between;font-size:13px"><span>${name}</span><span style="color:var(--tx3)">${fmt(cur)} / ${fmt(g.target)}</span></div><div class="goalbar"><i style="width:${pct}%"></i></div></div>`;}
+
+function renderInvestments(db,sess){
+  return `<h1 class="h1">${navLabel('investments')} ₿</h1><p class="sub">${t('inv_title')}</p>
+  <div class="grid3" style="margin-bottom:14px">
+    <div class="card stat"><div class="lbl">${t('invest_value')}</div><div class="val">${fmt(investValue(db))}</div></div>
+    <div class="card stat"><div class="lbl">${t('cost_basis')}</div><div class="val">${fmt(db.inv.reduce((s,i)=>s+i.costBasis,0))}</div></div>
+    <div class="card stat"><div class="lbl">${t('gain_loss')}</div><div class="val">${fmt(investValue(db)-db.inv.reduce((s,i)=>s+i.costBasis,0))}</div></div>
+  </div>
+  <div class="card">${db.inv.length?`<div class="tablewrap"><table><tr><th>${t('target')}</th><th>${t('cost_basis')}</th><th>${t('current_value')}</th><th>${t('gain_loss')}</th></tr>${db.inv.map(i=>`<tr><td>${i.name}</td><td>${fmt(i.costBasis)}</td><td>${fmt(i.currentValue)}</td><td>${fmt(i.currentValue-i.costBasis)}</td></tr>`).join('')}</table></div>`:`<div class="empty">${t('inv_empty')}</div>`}</div>`;
+}
+
+function renderAnalytics(db,sess){
+  const sp=splitPct(db);
+  const months={};approvedTx(db,'deposit').forEach(x=>{const d=new Date(x.ts);const k=d.getFullYear()+'-'+(d.getMonth()+1);months[k]=(months[k]||0)+x.amount;});
+  const keys=Object.keys(months).sort().slice(-6);
+  const max=Math.max(1,...keys.map(k=>months[k]));
+  const bars=keys.length?keys.map((k,i)=>`<div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px"><div style="width:100%;background:var(--surf2);border-radius:4px;height:90px;display:flex;align-items:flex-end"><div style="width:100%;background:var(--teal);border-radius:4px;height:${Math.round(months[k]/max*90)}px"></div></div><span style="font-size:10px;color:var(--tx3)">${k.split('-')[1]}/${k.split('-')[0].slice(2)}</span></div>`).join(''):`<div class="empty">${t('no_activity')}</div>`;
+  return `<h1 class="h1">${navLabel('analytics')} 📊</h1><p class="sub">${t('tagline')}</p>
+  <div class="grid2" style="margin-bottom:14px">
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:12px">${t('an_split')}</div>
+      <div class="splitbar"><div style="width:${sp.a}%;background:var(--gold)"></div><div style="width:${sp.n}%;background:var(--teal)"></div></div>
+      <div class="splitrow"><span><span class="dot" style="background:var(--gold)"></span>Arkan ${sp.a}% · ${fmt(totalContrib(db,'arkan'))}</span><span><span class="dot" style="background:var(--teal)"></span>Nazla ${sp.n}% · ${fmt(totalContrib(db,'nazla'))}</span></div>
+    </div>
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:12px">${t('an_monthly')}</div><div style="display:flex;gap:10px;align-items:flex-end">${bars}</div></div>
+  </div>
+  <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:6px">${t('an_goal_progress')}</div>${db.goals.map(g=>goalRow(db,g)).join('')}</div>`;
+}
+
+function renderJourney(db,sess){
+  const ms=[];
+  const dep=approvedTx(db,'deposit').sort((a,b)=>a.ts-b.ts);
+  if(dep[0])ms.push({t:t('m_first_deposit'),d:dep[0].ts});
+  let run=0;let hit50=false,hit100=false;
+  dep.forEach(x=>{run+=x.amount;if(run>=50000000&&!hit50){ms.push({t:t('m_fund_50'),d:x.ts});hit50=true;}if(run>=100000000&&!hit100){ms.push({t:t('m_fund_100'),d:x.ts});hit100=true;}});
+  return `<h1 class="h1">${navLabel('journey')} ♡</h1><p class="sub">${t('journey_title')}</p>
+  <div class="grid2">
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:6px">${t('journey_milestones')}</div>
+    ${ms.length?ms.map(m=>`<div class="milestone"><div class="mdot"></div><div><div style="font-size:13.5px">${m.t}</div><div style="font-size:11.5px;color:var(--tx3)">${fmtDate(m.d)}</div></div></div>`).join(''):`<div class="empty">${t('journey_none')}</div>`}
+    </div>
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:6px">${t('goals')}</div>${db.goals.map(g=>goalRow(db,g)).join('')}</div>
+  </div>`;
+}
+
+function renderSettings(db,sess){
+  return `<h1 class="h1">${navLabel('settings')} ⚙</h1><p class="sub">${t('tagline')}</p>
+  <div class="grid2">
+    <div class="card">
+      <div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:10px">${t('account_info')}</div>
+      <div class="summary-row"><span>${t('contributor')}</span><span>${sess.name}</span></div>
+      <div class="summary-row"><span>Email</span><span>${db.users[sess.uid].email}</span></div>
+      <div class="summary-row"><span>Username</span><span>${db.users[sess.uid].username}</span></div>
+      <div class="summary-row"><span>${t('role')}</span><span>${sess.role==='admin'?t('role_admin'):t('role_member')}</span></div>
+      <div class="lbl" style="font-weight:600;color:var(--tx);margin:18px 0 10px">${t('security')} / ${t('session')}</div>
+      <div class="summary-row"><span>${t('session_desc')}</span><span>${sess.name}</span></div>
+      <button class="btn btn-ghost" style="margin-top:12px" data-act="logout">${t('logout')}</button>
+    </div>
+    <div class="card">
+      <div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:10px">${t('language')}</div>
+      <div class="langtoggle" style="display:inline-flex;margin-bottom:18px"><button data-act="lang" data-v="en" class="${getLang()==='en'?'on':''}">English</button><button data-act="lang" data-v="id" class="${getLang()==='id'?'on':''}">Bahasa Indonesia</button></div>
+      <div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:8px">${t('notif_prefs')}</div>
+      <div class="sub" style="margin-bottom:10px">${t('notif_prefs_desc')}</div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:13.5px"><input type="checkbox" checked style="width:auto"> ${t('notif_prefs')}</label>
+    </div>
+  </div>`;
+}
+
+function renderAdmin(db,sess){
+  const pd=pendingTx(db,'deposit'),pw=pendingTx(db,'withdrawal');
+  return `<h1 class="h1">${t('admin_panel')}</h1><p class="sub">${t('tagline')}</p>
+  <div class="card" style="margin-bottom:14px">
+    <div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:8px">${t('emergency_freeze')}</div>
+    <div class="summary-row"><span>${db.freeze.active?t('freeze_active_lbl'):t('freeze_inactive_lbl')}</span>
+    <button class="btn ${db.freeze.active?'btn-teal':'btn-danger'}" data-act="freeze-toggle">${db.freeze.active?t('freeze_off_btn'):t('freeze_on_btn')}</button></div>
+  </div>
+  <div class="grid2">
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:8px">${t('pending_deposits')}</div>
+      ${pd.length?pd.map(x=>adminRow(x)).join(''):`<div class="empty">${t('no_pending')}</div>`}
+    </div>
+    <div class="card"><div class="lbl" style="font-weight:600;color:var(--tx);margin-bottom:8px">${t('pending_withdrawals')}</div>
+      ${pw.length?pw.map(x=>adminRow(x)).join(''):`<div class="empty">${t('no_pending')}</div>`}
+    </div>
+  </div>`;
+}
+function adminRow(x){return `<div class="list-item"><div><div style="font-size:13.5px">${fmt(x.amount)} — ${x.by?(x.by==='arkan'?'Arkan':'Nazla'):''}</div><div style="font-size:11.5px;color:var(--tx3)">${targetLabel(x.target||x.dest)} · ${fmtDate(x.ts)}</div></div><div style="display:flex;gap:6px"><button class="btn btn-teal" style="padding:6px 10px;font-size:12px" data-act="admin-approve" data-id="${x.id}">${t('approve')}</button><button class="btn btn-danger" style="padding:6px 10px;font-size:12px" data-act="admin-reject" data-id="${x.id}">${t('reject')}</button></div></div>`;}
+
+/* ---------- OVERLAYS: modal / notif panel / lyra panel ---------- */
+function renderOverlays(db,sess){
+  const root=document.getElementById('overlayRoot');
+  let html='';
+  if(STATE.modal==='topup')html+=topupModal(db,sess);
+  if(STATE.modal==='withdraw')html+=withdrawModal(db,sess);
+  if(STATE.notifOpen)html+=notifPanel(db,sess);
+  if(STATE.lyraOpen)html+=lyraPanel(db,sess);
+  root.innerHTML=html;
+}
+function topupModal(db,sess){
+  const s=STATE.modalStep,w=STATE.wizard;
+  let body='';
+  if(s===1){body=`<div class="field"><label>${t('tu_amount_lbl')}</label><input id="wAmount" type="number" min="0" value="${w.amount||''}" placeholder="100000">${w.err?`<div class="err">${w.err}</div>`:''}</div>`;}
+  else if(s===2){body=`<div class="field"><label>${t('tu_target_lbl')}</label><select id="wTarget">
+    <option value="general" ${w.target==='general'?'selected':''}>${t('general_fund')}</option>
+    ${db.goals.map(g=>`<option value="${g.id}" ${w.target===g.id?'selected':''}>${getLang()==='id'?g.id_:g.en}</option>`).join('')}
+  </select></div>`;}
+  else if(s===3){body=`<p class="sub" style="margin-top:0">${t('tu_bank')}</p><div class="card" style="background:var(--surf2)"><div class="summary-row"><span>Bank</span><span>BCA</span></div><div class="summary-row"><span>No. Rek</span><span>1234567890</span></div><div class="summary-row"><span>${t('contributor')}</span><span>A × N OUR FUND</span></div></div>`;}
+  else if(s===4){body=`<div class="upload ${w.proof?'ok':''}" id="uploadBox">${w.proof?('✓ '+t('tu_uploaded')+': '+w.proof):t('tu_upload_cta')}</div><input type="file" id="wFile" accept="image/*,application/pdf" class="hidden">${w.err?`<div class="err">${w.err}</div>`:''}`;}
+  else{body=`<div class="summary-row"><span>${t('amount')}</span><span>${fmt(w.amount)}</span></div><div class="summary-row"><span>${t('contributor')}</span><span>${sess.name}</span></div><div class="summary-row"><span>${t('target')}</span><span>${targetLabel(w.target)}</span></div><div class="summary-row"><span>${t('method')}</span><span>${t('method_transfer')}</span></div><div class="summary-row"><span>${t('proof_status')}</span><span>${w.proof||'-'}</span></div>`;}
+  return `<div class="modal-ov"><div class="modal">
+  <div class="modal-h"><b>${t('topup')}</b><button class="iconbtn" data-act="modal-close">✕</button></div>
+  <div class="modal-b"><div class="steps">${[1,2,3,4,5].map(i=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div>
+  <div class="sub" style="margin-top:0">${t('step')} ${s}/5 · ${['','tu_amount','tu_target','tu_pay','tu_proof','tu_confirm'][s]?t(['','tu_amount','tu_target','tu_pay','tu_proof','tu_confirm'][s]):''}</div>
+  ${body}</div>
+  <div class="modal-f">${s>1?`<button class="btn btn-ghost" data-act="tu-back">${t('back')}</button>`:`<button class="btn btn-ghost" data-act="modal-close">${t('cancel')}</button>`}
+  ${s<5?`<button class="btn btn-gold" data-act="tu-next">${t('next')}</button>`:`<button class="btn btn-gold" data-act="tu-submit">${t('submit')}</button>`}</div>
+  </div></div>`;
+}
+function withdrawModal(db,sess){
+  const s=STATE.modalStep,w=STATE.wizard;
+  const ab=availBalance(db);
+  let body='';
+  if(s===1){body=`<div class="field"><label>${t('w_amount_lbl')}</label><input id="wAmount" type="number" min="0" value="${w.amount||''}" placeholder="100000"><div class="sub" style="margin:6px 0 0">${t('avail_note')}: ${fmt(ab)}</div>${w.err?`<div class="err">${w.err}</div>`:''}</div>`;}
+  else if(s===2){body=`<div class="field"><label>${t('w_dest_lbl')}</label><select id="wDest"><option value="dest_arkan" ${w.dest==='dest_arkan'?'selected':''}>${t('dest_arkan')}</option><option value="dest_nazla" ${w.dest==='dest_nazla'?'selected':''}>${t('dest_nazla')}</option></select></div>`;}
+  else{body=`<div class="summary-row"><span>${t('amount')}</span><span>${fmt(w.amount)}</span></div><div class="summary-row"><span>${t('destination')}</span><span>${targetLabel(w.dest)}</span></div><div class="summary-row"><span>${t('contributor')}</span><span>${sess.name}</span></div><div class="summary-row"><span>${t('proof_status')}</span><span>${t('status_pending')}</span></div>`;}
+  return `<div class="modal-ov"><div class="modal">
+  <div class="modal-h"><b>${t('withdraw')}</b><button class="iconbtn" data-act="modal-close">✕</button></div>
+  <div class="modal-b"><div class="steps">${[1,2,3].map(i=>`<i class="${i<=s?'on':''}"></i>`).join('')}</div>
+  <div class="sub" style="margin-top:0">${t('step')} ${s}/3</div>${body}</div>
+  <div class="modal-f">${s>1?`<button class="btn btn-ghost" data-act="wd-back">${t('back')}</button>`:`<button class="btn btn-ghost" data-act="modal-close">${t('cancel')}</button>`}
+  ${s<3?`<button class="btn btn-teal" data-act="wd-next">${t('next')}</button>`:`<button class="btn btn-teal" data-act="wd-submit">${t('submit')}</button>`}</div>
+  </div></div>`;
+}
+function notifPanel(db,sess){
+  const list=db.notif.filter(n=>n.audience==='all'||sess.role==='admin').slice(0,25);
+  const KMAP={dep_sub:'n_dep_sub',dep_appr:'n_dep_appr',dep_rej:'n_dep_rej',wd_sub:'n_wd_sub',wd_appr:'n_wd_appr',wd_rej:'n_wd_rej',freeze_on:'n_freeze_on',freeze_off:'n_freeze_off'};
+  return `<div class="notifpanel"><div class="panel-h"><b>${t('notif_title')}</b><button class="iconbtn" data-act="notif-toggle">✕</button></div>
+  <div class="panel-b">${list.length?list.map(n=>`<div class="notif-item ${n.read?'':'unread'}">${t(KMAP[n.key]||n.key)}<small>${fmtDate(n.ts)}</small></div>`).join(''):`<div class="empty">${t('no_notif')}</div>`}</div>
+  ${list.length?`<div style="padding:12px 18px;border-top:1px solid var(--bd)"><button class="btn btn-ghost" style="width:100%" data-act="notif-read">${t('mark_read')}</button></div>`:''}
+  </div>`;
+}
+function lyraPanel(db,sess){
+  return `<div class="lyrapanel"><div class="panel-h"><div><b>${t('lyra_title')}</b><div class="sub" style="margin:2px 0 0">${t('lyra_sub')}</div></div><button class="iconbtn" data-act="lyra-toggle">✕</button></div>
+  <div class="lyra-msgs" id="lyraMsgs">
+    <div class="lyra-msg a">${t('lyra_greet')}</div>
+    ${STATE.lyraMsgs.map(m=>`<div class="lyra-msg ${m.who}">${m.text}</div>`).join('')}
+  </div>
+  <div class="lyra-inputrow"><input id="lyraInput" placeholder="${t('lyra_ph')}"><button class="btn btn-gold" data-act="lyra-send">${t('submit')}</button></div>
+  </div>`;
+}
+
+/* ---------- LYRA (rule-based, reads only real stored ledger data; role-aware) ---------- */
+function askLyra(q,db,sess){
+  const s=q.toLowerCase();
+  const sp=splitPct(db);
+  if(/split|persentase|kontribusi|contribution/.test(s))return `Arkan ${sp.a}% (${fmt(totalContrib(db,'arkan'))}) · Nazla ${sp.n}% (${fmt(totalContrib(db,'nazla'))}).`;
+  if(/pending|tertunda/.test(s)){const p=pendingTx(db);if(!p.length)return getLang()==='id'?'Tidak ada transaksi tertunda saat ini.':'No transactions are pending right now.';return (getLang()==='id'?'Tertunda: ':'Pending: ')+p.map(x=>`${x.type} ${fmt(x.amount)}`).join(', ');}
+  if(/total|fund value|nilai dana/.test(s))return `${t('total_fund')}: ${fmt(totalFund(db))}.`;
+  if(/invest/.test(s))return `${t('invest_value')}: ${fmt(investValue(db))}.`;
+  if(/goal|tujuan/.test(s))return db.goals.map(g=>`${getLang()==='id'?g.id_:g.en}: ${fmt(goalCurrent(db,g.id))}/${fmt(g.target)}`).join(' · ');
+  if(/month|bulan/.test(s)){const now=new Date();const k=now.getFullYear()+'-'+(now.getMonth()+1);const sum=approvedTx(db,'deposit').filter(x=>{const d=new Date(x.ts);return (d.getFullYear()+'-'+(d.getMonth()+1))===k;}).reduce((a,x)=>a+x.amount,0);return (getLang()==='id'?'Setoran bulan ini: ':'This month\'s deposits: ')+fmt(sum);}
+  if(/balance|saldo/.test(s))return `${t('avail_bal')}: ${fmt(availBalance(db))}.`;
+  if(/freeze|beku/.test(s))return db.freeze.active?t('freeze_banner'):(getLang()==='id'?'Penarikan tidak sedang dibekukan.':'Withdrawals are not currently frozen.');
+  return t('lyra_unknown');
+}
+
+/* ---------- EVENT BINDING ---------- */
+function bind(){
+  document.querySelectorAll('[data-act]').forEach(el=>{
+    el.onclick=async(e)=>{
+      const act=el.dataset.act;
+      if(act==='lang'){setLang(el.dataset.v);return;}
+      if(act==='login'){await doLogin();return;}
+      if(act==='logout'){clearSession();toast(t('toast_logout'));render();return;}
+      if(act==='nav'){STATE.notifOpen=false;STATE.lyraOpen=false;goto(el.dataset.to);return;}
+      if(act==='notif-toggle'){STATE.notifOpen=!STATE.notifOpen;render();return;}
+      if(act==='notif-read'){const db=loadDB();db.notif.forEach(n=>n.read=true);saveDB(db);render();return;}
+      if(act==='lyra-toggle'){STATE.lyraOpen=!STATE.lyraOpen;render();return;}
+      if(act==='lyra-send'){sendLyra();return;}
+      if(act==='topup-open'){STATE.modal='topup';STATE.modalStep=1;STATE.wizard={target:'general'};renderOverlays(loadDB(),getSession());bind();return;}
+      if(act==='withdraw-open'){const db=loadDB();if(db.freeze.active){toast(t('err_frozen'),'err');return;}STATE.modal='withdraw';STATE.modalStep=1;STATE.wizard={dest:'dest_arkan'};renderOverlays(db,getSession());bind();return;}
+      if(act==='modal-close'){STATE.modal=null;renderOverlays(loadDB(),getSession());bind();return;}
+      if(act==='tu-next'){tuNext();return;}
+      if(act==='tu-back'){STATE.modalStep--;renderOverlays(loadDB(),getSession());bind();return;}
+      if(act==='tu-submit'){tuSubmit();return;}
+      if(act==='wd-next'){wdNext();return;}
+      if(act==='wd-back'){STATE.modalStep--;renderOverlays(loadDB(),getSession());bind();return;}
+      if(act==='wd-submit'){wdSubmit();return;}
+      if(act==='freeze-toggle'){freezeToggle();return;}
+      if(act==='admin-approve'){adminDecide(el.dataset.id,'approved');return;}
+      if(act==='admin-reject'){adminDecide(el.dataset.id,'rejected');return;}
+    };
+  });
+  const ub=document.getElementById('uploadBox');
+  if(ub)ub.onclick=()=>document.getElementById('wFile').click();
+  const wf=document.getElementById('wFile');
+  if(wf)wf.onchange=()=>{
+    const f=wf.files[0];
+    if(!f){return;}
+    const okType=/^image\//.test(f.type)||f.type==='application/pdf';
+    if(!okType||f.size>5*1024*1024){STATE.wizard.err=t('err_file');STATE.wizard.proof=null;}
+    else{STATE.wizard.proof=f.name;STATE.wizard.err='';}
+    renderOverlays(loadDB(),getSession());bind();
+  };
+  const li=document.getElementById('loginId');
+  if(li)document.getElementById('loginPw').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin();});
+  const lin=document.getElementById('lyraInput');
+  if(lin)lin.addEventListener('keydown',e=>{if(e.key==='Enter')sendLyra();});
+}
+async function doLogin(){
+  const idv=(document.getElementById('loginId').value||'').trim().toLowerCase();
+  const pw=document.getElementById('loginPw').value||'';
+  if(!idv||!pw){STATE.loginErr=t('err_required');render();return;}
+  STATE.loginBusy=true;STATE.loginErr='';render();
+  const db=loadDB();
+  await new Promise(r=>setTimeout(r,450));
+  const hash=await sha256(pw);
+  let found=null;
+  for(const uid_ in db.users){const u=db.users[uid_];if(u.email.toLowerCase()===idv||u.username.toLowerCase()===idv){found=uid_;break;}}
+  STATE.loginBusy=false;
+  if(found&&db.users[found].hash===hash){
+    setSession({uid:found,name:db.users[found].name,role:db.users[found].role,exp:Date.now()+12*3600*1000});
+    STATE.loginErr='';goto('dashboard');render();
+  }else{STATE.loginErr=t('login_err');render();}
+}
+function tuNext(){
+  const w=STATE.wizard;
+  if(STATE.modalStep===1){
+    const v=parseFloat(document.getElementById('wAmount').value);
+    if(!v&&v!==0){w.err=t('err_required');}else if(isNaN(v)){w.err=t('err_number');}else if(v<=0){w.err=t('err_positive');}else if(v<10000){w.err=t('err_min');}
+    else{w.amount=v;w.err='';STATE.modalStep=2;}
+  }else if(STATE.modalStep===2){w.target=document.getElementById('wTarget').value;STATE.modalStep=3;}
+  else if(STATE.modalStep===3){STATE.modalStep=4;}
+  else if(STATE.modalStep===4){if(!w.proof){w.err=t('err_file');}else{STATE.modalStep=5;}}
+  renderOverlays(loadDB(),getSession());bind();
+}
+function tuSubmit(){
+  const db=loadDB();const sess=getSession();const w=STATE.wizard;
+  db.tx.push({id:uid(),type:'deposit',amount:w.amount,by:sess.uid,target:w.target,status:'pending',ts:Date.now(),method:'transfer',proof:w.proof});
+  pushNotif(db,'dep_sub','admin');
+  saveDB(db);STATE.modal=null;toast(t('tu_success'),'ok');render();
+}
+function wdNext(){
+  const w=STATE.wizard;const db=loadDB();const ab=availBalance(db);
+  if(STATE.modalStep===1){
+    const v=parseFloat(document.getElementById('wAmount').value);
+    if(!v&&v!==0){w.err=t('err_required');}else if(isNaN(v)){w.err=t('err_number');}else if(v<=0){w.err=t('err_positive');}else if(v<10000){w.err=t('err_min');}else if(v>ab){w.err=t('err_over');}
+    else{w.amount=v;w.err='';STATE.modalStep=2;}
+  }else if(STATE.modalStep===2){w.dest=document.getElementById('wDest').value;STATE.modalStep=3;}
+  renderOverlays(loadDB(),getSession());bind();
+}
+function wdSubmit(){
+  const db=loadDB();const sess=getSession();const w=STATE.wizard;
+  if(db.freeze.active){toast(t('err_frozen'),'err');STATE.modal=null;render();return;}
+  if(w.amount>availBalance(db)){toast(t('err_over'),'err');STATE.modal=null;render();return;}
+  db.tx.push({id:uid(),type:'withdrawal',amount:w.amount,by:sess.uid,dest:w.dest,status:'pending',ts:Date.now()});
+  pushNotif(db,'wd_sub','admin');
+  saveDB(db);STATE.modal=null;toast(t('w_success'),'ok');render();
+}
+function freezeToggle(){
+  const db=loadDB();db.freeze.active=!db.freeze.active;db.freeze.at=Date.now();
+  pushNotif(db,db.freeze.active?'freeze_on':'freeze_off','all');
+  saveDB(db);render();
+}
+function adminDecide(id,status){
+  const db=loadDB();const x=db.tx.find(t=>t.id===id);if(!x)return;
+  x.status=status;
+  const key=(x.type==='deposit'?'dep_':'wd_')+(status==='approved'?'appr':'rej');
+  pushNotif(db,key,'all');
+  saveDB(db);render();
+}
+function sendLyra(){
+  const inp=document.getElementById('lyraInput');const q=inp.value.trim();if(!q)return;
+  const db=loadDB();const sess=getSession();
+  STATE.lyraMsgs.push({who:'u',text:q});
+  const ans=askLyra(q,db,sess);
+  STATE.lyraMsgs.push({who:'a',text:ans});
+  renderOverlays(db,sess);bind();
+  const box=document.getElementById('lyraMsgs');if(box)box.scrollTop=box.scrollHeight;
+  const ni=document.getElementById('lyraInput');if(ni)ni.focus();
+}
+
+/* ---------- INIT ---------- */
+syncRouteFromHash();
+if(!getSession())location.hash='';
+render();
+</script>
+</body>
+</html>
